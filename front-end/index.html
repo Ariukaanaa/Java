@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkyMN — Нислэгийн захиалга</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div>
+      <div class="logo">Sky<span>MN</span></div>
+      <div class="logo-sub">Airline Reservation</div>
+    </div>
+    <div class="status-dot">
+      <div class="dot" id="statusDot"></div>
+      <span id="statusText">Холбогдож байна...</span>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <main>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('flights')">
+        <span class="tab-icon">✈</span> Нислэгүүд
+      </button>
+      <button class="tab" onclick="switchTab('booking')">
+        <span class="tab-icon">📋</span> Захиалга
+      </button>
+      <button class="tab" onclick="switchTab('tickets')">
+        <span class="tab-icon">🎫</span> Миний тасалбар
+        <span id="ticketCount"></span>
+      </button>
+    </div>
+
+    <!-- ===== FLIGHTS PANEL ===== -->
+    <div class="panel active" id="panel-flights">
+      <div class="section-title">Нислэгүүд</div>
+      <div class="section-sub">Улаанбаатараас явах боломжтой нислэгүүд</div>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Очих газар хайх... (Москва, Сөүл...)"
+          oninput="filterFlights()"
+        >
+        <button class="btn btn-outline" onclick="loadFlights()">↺ Шинэчлэх</button>
+      </div>
+
+      <div id="flightsContainer">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <div>Нислэгийн мэдээлэл татаж байна...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BOOKING PANEL ===== -->
+    <div class="panel" id="panel-booking">
+      <div class="section-title">Нислэг захиалах</div>
+      <div class="section-sub">Мэдээллээ оруулаад захиалга хийнэ үү</div>
+
+      <div class="booking-form">
+        <div class="form-group">
+          <label class="form-label">Нислэг сонгох</label>
+          <select class="form-input" id="bookFlight">
+            <option value="">— Нислэг сонгоно уу —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Овог нэр</label>
+          <input type="text" class="form-input" id="passengerName" placeholder="Батбаяр Дорж">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Паспортын дугаар</label>
+          <input type="text" class="form-input" id="passportNum" placeholder="MN1234567">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Суудлын анги</label>
+          <select class="form-input" id="seatClass">
+            <option value="Economy">Economy</option>
+            <option value="Business">Business</option>
+            <option value="First">First Class</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="submitBooking()">
+          Захиалга батлах →
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== TICKETS PANEL ===== -->
+    <div class="panel" id="panel-tickets">
+      <div class="section-title">Миний тасалбарууд</div>
+      <div class="section-sub">Захиалсан нислэгүүдийн жагсаалт</div>
+      <div id="ticketsContainer">
+        <div class="empty">Одоогоор захиалга байхгүй байна</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="index.js"></script>
+</body>
+</html>

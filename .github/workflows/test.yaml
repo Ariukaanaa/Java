@@ -1,0 +1,24 @@
+name : Test
+
+on : 
+  push  :
+      branchs : [ dev] 
+
+
+jobs : 
+  test : 
+    runs-on : ubuntu-latest
+
+    steps : 
+        name : Code tatah 
+        uses : action/checkout@v4
+
+        name : Java tatat
+        uses : action/setup-java@v4
+        with : 
+            java-verion : '17'
+            distribution : "temurin"
+        
+        name : Test ajiluulah 
+        uses : mvn test
+  

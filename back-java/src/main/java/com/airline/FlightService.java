@@ -1,10 +1,10 @@
 package com.airline;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 
 @Service
 public class FlightService {
@@ -21,7 +21,6 @@ public class FlightService {
         flights.add( new Flight("MN505", "Улаанбаатар", "Франкфурт","22:00", "06:00", 600.00, 40)); 
         flights.add( new Flight("MN606", "Улаанбаатар", "Стамбул",  "10:00", "15:30", 390.00, 0)); 
     }
-
   
     public List<Flight> getAllFlights() {
         return flights;

@@ -209,7 +209,7 @@ async function submitBooking() {
         
 
         loadFlights();
-        setTimeout(() => switchTab('tickets'), 1500);
+        setTimeout(() => switchTab('confirm'), 1500);
 
         } else {
         showToast('❌ ' + data.message, 'error');

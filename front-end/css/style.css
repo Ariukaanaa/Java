@@ -1,13 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
 :root {
   --sky:      #D96846;
-  --sky-mid:  #CDCBD6;
-  --sky-card: #2F3020;
+  --sky-mid:  #100806;
+  --sky-card: #ac390b;
   --accent:   #e8c547;
   --accent2:  #4fc3f7;
-  --text:     #596235;
-
-  --muted:    rgba(255,255,255,0.6); 
-
+  --text:     #101010;
+  --muted:    rgb(255, 255, 255);
   --danger:   #ff6b6b;
   --success:  #4ade80;
   --border:   rgba(255, 255, 255, 0.07);
@@ -20,11 +20,13 @@
 }
 
 body {
-
-    background : var(--sky-card); 
+  background: var(--sky-card);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--muted);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
-
-
 
 /* Stars */
 body::before {
@@ -79,6 +81,7 @@ header > * {
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
+  color: var(--muted);
 }
 
 .logo span { color: var(--accent); }
@@ -122,9 +125,9 @@ header > * {
 main {
   position: relative;
   z-index: 10;
-  max-width: 960px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: 48px 32px 100px;
 }
 
 /* ===== TABS ===== */
@@ -135,7 +138,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 5px;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
   width: fit-content;
 }
 
@@ -155,18 +158,18 @@ main {
   transition: all 0.2s;
 }
 
-.tab:hover { color: var(--text); }
+.tab:hover { color: var(--accent); }
 
 .tab.active {
   background: var(--accent);
-  color: var(--sky);
+  color: var(--sky-mid);
   font-weight: 600;
 }
 
 #ticketCount {
   display: none;
   background: var(--accent);
-  color: var(--sky);
+  color: var(--sky-mid);
   border-radius: 99px;
   padding: 1px 7px;
   font-size: 11px;
@@ -189,15 +192,16 @@ main {
 /* ===== SECTION TITLE ===== */
 .section-title {
   font-family: 'Syne', sans-serif;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  color: var(--muted);
 }
 
 .section-sub {
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 14px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 /* ===== SEARCH BAR ===== */
@@ -209,7 +213,7 @@ main {
 
 .search-bar input {
   flex: 1;
-  background: var(--sky-mid);
+  background: white;
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 18px;
@@ -220,8 +224,8 @@ main {
   transition: border-color 0.2s;
 }
 
-.search-bar input:focus   { border-color: var(--accent2); }
-.search-bar input::placeholder { color: var(--muted); }
+.search-bar input:focus        { border-color: var(--accent2); }
+.search-bar input::placeholder { color: #aaa; }
 
 /* ===== BUTTONS ===== */
 .btn {
@@ -239,7 +243,7 @@ main {
 
 .btn-primary {
   background: var(--accent);
-  color: var(--sky);
+  color: var(--sky-mid);
   font-weight: 600;
 }
 
@@ -249,7 +253,7 @@ main {
 
 .btn-outline {
   background: transparent;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.2);
   color: var(--muted);
 }
 
@@ -267,13 +271,13 @@ main {
   transition: all 0.15s;
 }
 
-.btn-book:hover    { background: var(--accent); color: var(--sky); }
+.btn-book:hover    { background: var(--accent); color: var(--sky-mid); }
 .btn-book:disabled { opacity: 0.3; cursor: not-allowed; border-color: var(--muted); color: var(--muted); }
 
 .btn-danger {
   background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
   font-size: 13px;
   margin-top: 16px;
 }
@@ -281,23 +285,24 @@ main {
 .btn-danger:hover { border-color: var(--danger); color: var(--danger); }
 
 /* ===== FLIGHT CARD ===== */
-.flights-grid { display: flex; flex-direction: column; gap: 12px; }
+.flights-grid { display: flex; flex-direction: column; gap: 14px; }
 
 .flight-card {
-  background: var(--sky-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 22px 28px;
   display: grid;
   grid-template-columns: 1fr auto 1fr auto auto;
   align-items: center;
-  gap: 16px;
-  transition: border-color 0.2s, transform 0.15s;
+  gap: 20px;
+  transition: border-color 0.2s, transform 0.15s, background 0.2s;
 }
 
 .flight-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
 }
 
 .flight-num {
@@ -313,11 +318,12 @@ main {
   font-family: 'Syne', sans-serif;
   font-size: 18px;
   font-weight: 700;
+  color: var(--muted);
 }
 
 .time {
   font-size: 13px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.5);
   margin-top: 2px;
 }
 
@@ -326,14 +332,13 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  color: var(--muted);
   font-size: 12px;
 }
 
 .arrow-line {
   width: 80px;
   height: 1px;
-  background: linear-gradient(90deg, var(--muted), var(--accent2));
+  background: linear-gradient(90deg, rgba(255,255,255,0.2), var(--accent2));
   position: relative;
 }
 
@@ -357,7 +362,7 @@ main {
 
 .seats {
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.45);
   margin-top: 2px;
 }
 
@@ -374,19 +379,19 @@ main {
 
 /* ===== BOOKING FORM ===== */
 .booking-form {
-  background: var(--sky-card);
-  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
-  padding: 32px;
+  padding: 36px;
   max-width: 520px;
 }
 
-.form-group { margin-bottom: 20px; }
+.form-group { margin-bottom: 22px; }
 
 .form-label {
   display: block;
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.5);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 8px;
@@ -394,8 +399,8 @@ main {
 
 .form-input {
   width: 100%;
-  background: var(--sky-mid);
-  border: 1px solid var(--border);
+  background: white;
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
   padding: 12px 16px;
   color: var(--text);
@@ -406,16 +411,16 @@ main {
 }
 
 .form-input:focus { border-color: var(--accent2); }
-select.form-input option { background: var(--sky-mid); }
+select.form-input option { background: #1a1a1a; color: white; }
 
 /* ===== TICKETS ===== */
-.tickets-grid { display: flex; flex-direction: column; gap: 12px; }
+.tickets-grid { display: flex; flex-direction: column; gap: 14px; }
 
 .ticket-card {
-  background: var(--sky-card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 22px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -426,11 +431,12 @@ select.form-input option { background: var(--sky-mid); }
   font-family: 'Syne', sans-serif;
   font-size: 16px;
   font-weight: 700;
+  color: var(--muted);
 }
 
 .ticket-meta {
   font-size: 13px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.45);
   margin-top: 4px;
 }
 
@@ -454,13 +460,13 @@ select.form-input option { background: var(--sky-mid); }
 .loading {
   text-align: center;
   padding: 60px 0;
-  color: var(--muted);
+  color: rgba(255,255,255,0.4);
 }
 
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 2px solid var(--border);
+  border: 2px solid rgba(255,255,255,0.1);
   border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -472,8 +478,68 @@ select.form-input option { background: var(--sky-mid); }
 .empty {
   text-align: center;
   padding: 60px 0;
-  color: var(--muted);
+  color: rgba(255,255,255,0.35);
   font-size: 14px;
+}
+
+/* ===== CONFIRMATION CARD ===== */
+.confirm-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 36px;
+  max-width: 520px;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.confirm-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.confirm-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.confirm-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 12px 0;
+}
+
+.confirm-total .confirm-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.confirm-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  font-size: 12px;
+  text-align: center;
+  padding: 60px 0;
+  color: rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  letter-spacing: 0.5px;
 }
 
 /* ===== TOAST ===== */

@@ -33,7 +33,7 @@
         <span class="tab-icon">📋</span> Захиалга
       </button>
       <button class="tab" onclick="switchTab('confirm')">
-        <span class="tab-icon">&#10003;</span> Confirmation
+        <span class="tab-icon">✓</span> Confirmation
       </button>
       <button class="tab" onclick="switchTab('tickets')">
         <span class="tab-icon">🎫</span> Миний тасалбар
@@ -98,17 +98,59 @@
       </div>
     </div>
 
-    <!--- Tulburiin panel --->
+    <!-- ===== CONFIRMATION PANEL ===== -->
     <div class="panel" id="panel-confirm">
-        <div class="section-title"> Confirmation </div>
-        <div class="booking-form">
-            <div class="form-group">
-                <label  class="form-label"> Chiglel </label>
-                <label class="form-label">Үнэ</label>
-            <div id="pricePreview">0 $</div>
+      <div class="section-title">Confirmation</div>
+      <div class="section-sub">Захиалгаа шалгаад төлбөр төлнө үү</div>
+
+      <div class="confirm-card">
+
+        <div class="confirm-row">
+          <span class="confirm-label">Чиглэл</span>
+          <span class="confirm-value" id="confirm-route">—</span>
         </div>
+
+        <div class="confirm-row">
+          <span class="confirm-label">Нислэг</span>
+          <span class="confirm-value" id="confirm-flight">—</span>
         </div>
-       
+
+        <div class="confirm-row">
+          <span class="confirm-label">Хөөрөх цаг</span>
+          <span class="confirm-value" id="confirm-time">—</span>
+        </div>
+
+        <div class="confirm-row">
+          <span class="confirm-label">Зорчигч</span>
+          <span class="confirm-value" id="confirm-name">—</span>
+        </div>
+
+        <div class="confirm-row">
+          <span class="confirm-label">Паспорт</span>
+          <span class="confirm-value" id="confirm-passport">—</span>
+        </div>
+
+        <div class="confirm-row">
+          <span class="confirm-label">Суудлын анги</span>
+          <span class="confirm-value" id="confirm-class">—</span>
+        </div>
+
+        <div class="confirm-divider"></div>
+
+        <div class="confirm-row confirm-total">
+          <span class="confirm-label">Нийт үнэ</span>
+          <span class="confirm-price" id="confirm-price">$0</span>
+        </div>
+
+        <button class="btn btn-primary btn-full" style="margin-top: 24px;" onclick="confirmPayment()">
+          💳 Төлбөр төлөх →
+        </button>
+
+        <button class="btn btn-outline btn-full" style="margin-top: 10px;" onclick="switchTab('booking')">
+          ← Буцах
+        </button>
+
+      </div>
     </div>
 
     <!-- ===== TICKETS PANEL ===== -->
@@ -121,9 +163,15 @@
     </div>
 
   </main>
-    <script src="index.js" ></script>
-    <footer class="footer">
-        <p>© 2026 SkyMN Airlines</p>
-    </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="index.js"></script>
+
+  <footer class="footer">
+    <p>© 2026 SkyMN Airlines</p>
+  </footer>
+
 </body>
 </html>

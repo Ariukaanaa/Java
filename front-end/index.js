@@ -1,11 +1,12 @@
 const API = 'http://localhost:8080/api/flights';
 
-let allFlights = [];
-let myTickets  = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
+let allFlights  = [];
+let myTickets   = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
+let pendingTicket = null; // Confirmation хүлээж байгаа захиалга
 
 // ===== TAB SWITCH =====
 function switchTab(name) {
-  const tabNames = ['flights', 'booking', 'confirm',  'tickets'  ];
+  const tabNames = ['flights', 'booking', 'confirm', 'tickets'];
 
   document.querySelectorAll('.tab').forEach((tab, i) => {
     tab.classList.toggle('active', tabNames[i] === name);
@@ -42,14 +43,14 @@ async function loadFlights() {
 
     allFlights = await res.json();
 
-    document.getElementById('statusDot').className  = 'dot';
+    document.getElementById('statusDot').className    = 'dot';
     document.getElementById('statusText').textContent = 'Java сервер холбогдсон';
 
     renderFlights(allFlights);
     populateBookingSelect(allFlights);
 
   } catch {
-    document.getElementById('statusDot').className  = 'dot offline';
+    document.getElementById('statusDot').className    = 'dot offline';
     document.getElementById('statusText').textContent = 'Сервер холбогдохгүй байна';
 
     document.getElementById('flightsContainer').innerHTML = `
@@ -153,71 +154,92 @@ function quickBook(flightNum) {
   document.getElementById('bookFlight').value = flightNum;
 }
 
-// ===== SUBMIT BOOKING =====
+// ===== SUBMIT BOOKING → Confirmation руу явна =====
 async function submitBooking() {
-  const flightNum  = document.getElementById('bookFlight').value;
-  const name       = document.getElementById('passengerName').value.trim();
-  const passport   = document.getElementById('passportNum').value.trim();
-  const seatClass  = document.getElementById('seatClass').value;
+  const flightNum = document.getElementById('bookFlight').value;
+  const name      = document.getElementById('passengerName').value.trim();
+  const passport  = document.getElementById('passportNum').value.trim();
+  const seatClass = document.getElementById('seatClass').value;
 
   if (!flightNum || !name || !passport) {
     showToast('Бүх талбарыг бөглөнө үү!', 'error');
     return;
   }
 
+  const flight = allFlights.find(f => f.flightNumber === flightNum);
+
+  let price = flight?.price || 0;
+  if (seatClass === 'Business') price += 50;
+  if (seatClass === 'First')    price += 100;
+
+  // Pending ticket үүсгэнэ — төлөх товч дарахад л хадгална
+  pendingTicket = {
+    id:            Date.now(),
+    flightNumber:  flightNum,
+    origin:        flight?.origin        || '',
+    destination:   flight?.destination   || '',
+    departureTime: flight?.departureTime || '',
+    arrivalTime:   flight?.arrivalTime   || '',
+    price:         price,
+    passengerName: name,
+    passport:      passport,
+    seatClass:     seatClass,
+    bookedAt:      new Date().toLocaleDateString('mn-MN')
+  };
+
+  // Confirmation хуудсыг дүүргэнэ
+  renderConfirmation(pendingTicket);
+
+  // Confirmation tab руу явна
+  switchTab('confirm');
+}
+
+// ===== RENDER CONFIRMATION =====
+// HTML-г index.html дотор статикаар бичсэн —
+// энд зөвхөн утгуудыг шинэчилнэ
+function renderConfirmation(ticket) {
+  document.getElementById('confirm-route').textContent   = ticket.origin + ' → ' + ticket.destination;
+  document.getElementById('confirm-flight').textContent  = ticket.flightNumber;
+  document.getElementById('confirm-time').textContent    = ticket.departureTime + ' → ' + ticket.arrivalTime;
+  document.getElementById('confirm-name').textContent    = ticket.passengerName;
+  document.getElementById('confirm-passport').textContent = ticket.passport;
+  document.getElementById('confirm-class').textContent   = ticket.seatClass;
+  document.getElementById('confirm-price').textContent   = '$' + ticket.price;
+}
+
+// ===== CONFIRM PAYMENT → Java-д POST хийж ticket хадгална =====
+async function confirmPayment() {
+  if (!pendingTicket) return;
+
   try {
-    const res  = await fetch(`${API}/${flightNum}/book`, { method: 'POST' });
+    const res  = await fetch(`${API}/${pendingTicket.flightNumber}/book`, { method: 'POST' });
     const data = await res.json();
 
-    if (res.ok) 
-    {
+    if (res.ok) {
+      // Ticket хадгална
+      myTickets.push(pendingTicket);
+      localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
+      updateTicketCount();
 
-        const flight = allFlights.find(f => f.flightNumber === flightNum);
+      // Form цэвэрлэх
+      document.getElementById('passengerName').value = '';
+      document.getElementById('passportNum').value   = '';
+      document.getElementById('bookFlight').value    = '';
+      pendingTicket = null;
 
-        let price = flight?.price || 0;
+      loadFlights();
+      showToast('✅ Төлбөр амжилттай төлөгдлөө!');
 
-        if (seatClass === "Business") price += 50;
-        if (seatClass === "First") price += 100;
+      // Ticket tab руу явна
+      setTimeout(() => switchTab('tickets'), 1000);
 
-        const ticket = {
-            id:            Date.now(),
-            flightNumber:  flightNum,
-            origin:        flight?.origin        || '',
-            destination:   flight?.destination   || '',
-            departureTime: flight?.departureTime || '',
-            price:         price ,
-            passengerName: name,
-            passport:      passport,
-            seatClass:     seatClass,
-            bookedAt:      new Date().toLocaleDateString('mn-MN')
-        };
-
-     
-
-        document.getElementById("pricePreview").textContent = price + " $";
-
-        myTickets.push(ticket);
-        localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
-        updateTicketCount();
-
-        showToast('✅ ' + data.message);
-
-        // Form цэвэрлэх
-        document.getElementById('passengerName').value = '';
-        document.getElementById('passportNum').value   = '';
-        document.getElementById('bookFlight').value    = '';
-        
-
-        loadFlights();
-        setTimeout(() => switchTab('confirm'), 1500);
-
-        } else {
-        showToast('❌ ' + data.message, 'error');
-        }
-
-    } catch {
-        showToast('❌ Сервертэй холбогдож чадсангүй', 'error');
+    } else {
+      showToast('❌ ' + data.message, 'error');
     }
+
+  } catch {
+    showToast('❌ Сервертэй холбогдож чадсангүй', 'error');
+  }
 }
 
 // ===== RENDER TICKETS =====
@@ -265,10 +287,10 @@ function clearTickets() {
 function updateTicketCount() {
   const badge = document.getElementById('ticketCount');
   if (myTickets.length > 0) {
-    badge.style.display  = 'inline';
-    badge.textContent    = myTickets.length;
+    badge.style.display = 'inline';
+    badge.textContent   = myTickets.length;
   } else {
-    badge.style.display  = 'none';
+    badge.style.display = 'none';
   }
 }
 

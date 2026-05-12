@@ -2,6 +2,10 @@ package com.airline;
 
 public class Flight {
 
+    /*-----------------------------*/
+    /*--------  Variables  --------*/
+    /*-----------------------------*/
+
     private String flightNumber;
     private String origin;
     private String destination;
@@ -10,7 +14,9 @@ public class Flight {
     private double price;
     private int availableSeats;
 
-    // -------- Constructor --------
+    /*-----------------------------*/
+    /*-------- Constructor --------*/
+    /*-----------------------------*/
 
     public Flight(String flightNumber, String origin, String destination,
                   String departureTime, String arrivalTime,
@@ -25,7 +31,9 @@ public class Flight {
         this.availableSeats = availableSeats;
     }
 
-    // -------- Getters --------
+    /*-----------------------------*/
+    /*--------   Getters   --------*/
+    /*-----------------------------*/
 
     public String getFlightNumber  () { return flightNumber  ; }
     public String getOrigin        () { return origin        ; }
@@ -35,9 +43,9 @@ public class Flight {
     public double getPrice         () { return price         ; }
     public int    getAvailableSeats() { return availableSeats; }
 
-    // -------- Setters --------
+    /*-----------------------------*/
+    /*--------  Setters    --------*/
+    /*-----------------------------*/
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
-    }
+    public void setAvailableSeats(int availableSeats) {    this.availableSeats = availableSeats ;   }
 }

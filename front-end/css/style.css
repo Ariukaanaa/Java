@@ -482,6 +482,54 @@ select.form-input option { background: #1a1a1a; color: white; }
   font-size: 14px;
 }
 
+/* ===== CONFIRMATION CARD ===== */
+.confirm-card {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 36px;
+  max-width: 520px;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.confirm-label {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.confirm-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.confirm-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 12px 0;
+}
+
+.confirm-total .confirm-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.confirm-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
 /* ===== FOOTER ===== */
 .footer {
   font-size: 12px;

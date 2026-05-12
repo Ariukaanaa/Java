@@ -1,11 +1,13 @@
 :root {
-  --sky:      #4bcdd1;
-  --sky-mid:  #112240;
-  --sky-card: #162a4a;
+  --sky:      #D96846;
+  --sky-mid:  #CDCBD6;
+  --sky-card: #2F3020;
   --accent:   #e8c547;
   --accent2:  #4fc3f7;
-  --text:     #f0f4ff;
-  --muted:    #8899bb;
+  --text:     #596235;
+
+  --muted:    rgba(255,255,255,0.6); 
+
   --danger:   #ff6b6b;
   --success:  #4ade80;
   --border:   rgba(255, 255, 255, 0.07);
@@ -18,12 +20,11 @@
 }
 
 body {
-  background: var(--sky);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
+
+    background : var(--sky-card); 
 }
+
+
 
 /* Stars */
 body::before {
@@ -47,13 +48,30 @@ body::before {
 /* ===== HEADER ===== */
 header {
   position: relative;
+  height: 200px;
+  overflow: hidden;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 48px;
+  padding: 48px 48px;
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(8px);
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../img/image.png");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+header > * {
+  position: relative;
+  z-index: 1;
 }
 
 .logo {

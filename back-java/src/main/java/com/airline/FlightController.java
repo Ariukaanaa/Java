@@ -1,0 +1,66 @@
+package com.airline;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/flights")
+@CrossOrigin(origins = "*")
+public class FlightController {
+
+    private final FlightService flightService;
+
+    public FlightController(FlightService flightService) {
+        this.flightService = flightService;
+    }
+
+    // -------- GET /api/flights --------
+    // Бүх нислэг
+    @GetMapping
+    public List<Flight> getAllFlights() {
+        return flightService.getAllFlights();
+    }
+
+    // -------- GET /api/flights/available --------
+    // Суудал байгаа нислэгүүд
+    @GetMapping("/available")
+    public List<Flight> getAvailableFlights() {
+        return flightService.getAvailableFlights();
+    }
+
+    // -------- GET /api/flights/{flightNumber} --------
+    // Нислэгийн дугаараар хайх
+    @GetMapping("/{flightNumber}")
+    public ResponseEntity<Flight> getByFlightNumber(@PathVariable String flightNumber) {
+        return flightService.getByFlightNumber(flightNumber)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // -------- GET /api/flights/search?destination=Сөүл --------
+    // Очих газраар хайх
+    @GetMapping("/search")
+    public List<Flight> searchByDestination(@RequestParam String destination) {
+        return flightService.searchByDestination(destination);
+    }
+
+    // -------- POST /api/flights/{flightNumber}/book --------
+    // Суудал захиалах
+    @PostMapping("/{flightNumber}/book")
+    public ResponseEntity<Map<String, String>> bookSeat(@PathVariable String flightNumber) {
+        boolean success = flightService.bookSeat(flightNumber);
+        if (success) {
+            return ResponseEntity.ok(Map.of(
+                "message", "Амжилттай захиалагдлаа!",
+                "flight",  flightNumber
+            ));
+        }
+        return ResponseEntity.badRequest().body(Map.of(
+            "message", "Суудал байхгүй эсвэл нислэг олдсонгүй",
+            "flight",  flightNumber
+        ));
+    }
+}

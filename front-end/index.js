@@ -5,7 +5,7 @@ let myTickets  = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
 
 // ===== TAB SWITCH =====
 function switchTab(name) {
-  const tabNames = ['flights', 'booking', 'tickets'];
+  const tabNames = ['flights', 'booking', 'confirm',  'tickets'  ];
 
   document.querySelectorAll('.tab').forEach((tab, i) => {
     tab.classList.toggle('active', tabNames[i] === name);
@@ -142,7 +142,7 @@ function populateBookingSelect(flights) {
     .forEach(f => {
       sel.innerHTML += `
         <option value="${f.flightNumber}">
-          ${f.flightNumber} — ${f.origin} → ${f.destination} ($${f.price})
+          ${f.flightNumber} — ${f.origin} → ${f.destination}
         </option>`;
     });
 }
@@ -169,43 +169,55 @@ async function submitBooking() {
     const res  = await fetch(`${API}/${flightNum}/book`, { method: 'POST' });
     const data = await res.json();
 
-    if (res.ok) {
-      const flight = allFlights.find(f => f.flightNumber === flightNum);
+    if (res.ok) 
+    {
 
-      const ticket = {
-        id:            Date.now(),
-        flightNumber:  flightNum,
-        origin:        flight?.origin        || '',
-        destination:   flight?.destination   || '',
-        departureTime: flight?.departureTime || '',
-        price:         flight?.price         || 0,
-        passengerName: name,
-        passport:      passport,
-        seatClass:     seatClass,
-        bookedAt:      new Date().toLocaleDateString('mn-MN')
-      };
+        const flight = allFlights.find(f => f.flightNumber === flightNum);
 
-      myTickets.push(ticket);
-      localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
-      updateTicketCount();
+        let price = flight?.price || 0;
 
-      showToast('✅ ' + data.message);
+        if (seatClass === "Business") price += 50;
+        if (seatClass === "First") price += 100;
 
-      // Form цэвэрлэх
-      document.getElementById('passengerName').value = '';
-      document.getElementById('passportNum').value   = '';
-      document.getElementById('bookFlight').value    = '';
+        const ticket = {
+            id:            Date.now(),
+            flightNumber:  flightNum,
+            origin:        flight?.origin        || '',
+            destination:   flight?.destination   || '',
+            departureTime: flight?.departureTime || '',
+            price:         price ,
+            passengerName: name,
+            passport:      passport,
+            seatClass:     seatClass,
+            bookedAt:      new Date().toLocaleDateString('mn-MN')
+        };
 
-      loadFlights();
-      setTimeout(() => switchTab('tickets'), 1500);
+     
 
-    } else {
-      showToast('❌ ' + data.message, 'error');
+        document.getElementById("pricePreview").textContent = price + " $";
+
+        myTickets.push(ticket);
+        localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
+        updateTicketCount();
+
+        showToast('✅ ' + data.message);
+
+        // Form цэвэрлэх
+        document.getElementById('passengerName').value = '';
+        document.getElementById('passportNum').value   = '';
+        document.getElementById('bookFlight').value    = '';
+        
+
+        loadFlights();
+        setTimeout(() => switchTab('tickets'), 1500);
+
+        } else {
+        showToast('❌ ' + data.message, 'error');
+        }
+
+    } catch {
+        showToast('❌ Сервертэй холбогдож чадсангүй', 'error');
     }
-
-  } catch {
-    showToast('❌ Сервертэй холбогдож чадсангүй', 'error');
-  }
 }
 
 // ===== RENDER TICKETS =====

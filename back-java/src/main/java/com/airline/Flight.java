@@ -14,7 +14,8 @@ public class Flight {
 
     public Flight(String flightNumber, String origin, String destination,
                   String departureTime, String arrivalTime,
-                  double price, int availableSeats) {
+                  double price, int availableSeats) 
+    {
         this.flightNumber   = flightNumber;
         this.origin         = origin;
         this.destination    = destination;

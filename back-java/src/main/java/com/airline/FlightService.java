@@ -10,14 +10,19 @@ import java.util.Optional;
 public class FlightService {
 
     
-    private final List<Flight> flights = new ArrayList<>(List.of(
-        new Flight("MN101", "Улаанбаатар", "Москва",   "09:00", "16:00", 450.00, 120),
-        new Flight("MN202", "Улаанбаатар", "Сөүл",     "14:00", "19:00", 280.00, 80),
-        new Flight("MN303", "Улаанбаатар", "Бээжин",   "11:00", "14:30", 180.00, 95),
-        new Flight("MN404", "Улаанбаатар", "Токио",    "08:00", "15:00", 520.00, 60),
-        new Flight("MN505", "Улаанбаатар", "Франкфурт","22:00", "06:00", 680.00, 40),
-        new Flight("MN606", "Улаанбаатар", "Стамбул",  "10:00", "15:30", 390.00, 0)
-    ));
+    private List<Flight> flights = new ArrayList<>(); 
+
+    public FlightService()
+    {
+        flights.add( new Flight("MN101", "Улаанбаатар", "Москва",   "09:00", "16:00", 450.00, 120)); 
+        flights.add( new Flight("MN202", "Улаанбаатар", "Сөүл",     "14:00", "19:00", 280.00, 80)); 
+        flights.add( new Flight("MN303", "Улаанбаатар", "Бээжин",   "11:00", "14:30", 180.00, 95)); 
+        flights.add( new Flight("MN404", "Улаанбаатар", "Токио",    "08:00", "15:00", 520.00, 60)); 
+        flights.add( new Flight("MN505", "Улаанбаатар", "Франкфурт","22:00", "06:00", 600.00, 40)); 
+        flights.add( new Flight("MN606", "Улаанбаатар", "Стамбул",  "10:00", "15:30", 390.00, 0)); 
+    }
+
+   
 
     // Бүх нислэг
     public List<Flight> getAllFlights() {

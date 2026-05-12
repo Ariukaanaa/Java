@@ -19,4 +19,6 @@ jobs:
               distribution : "temurin"
 
         - name : Test ajiluulah 
-          run  : mvn test 
+          run: |
+                cd back-java
+                mvn test

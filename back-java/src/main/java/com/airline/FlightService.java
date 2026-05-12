@@ -22,9 +22,7 @@ public class FlightService {
         flights.add( new Flight("MN606", "Улаанбаатар", "Стамбул",  "10:00", "15:30", 390.00, 0)); 
     }
 
-   
-
-    // Бүх нислэг
+  
     public List<Flight> getAllFlights() {
         return flights;
     }

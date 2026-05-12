@@ -169,21 +169,34 @@ async function submitBooking() {
     const res  = await fetch(`${API}/${flightNum}/book`, { method: 'POST' });
     const data = await res.json();
 
-    if (res.ok) {
-      const flight = allFlights.find(f => f.flightNumber === flightNum);
+    if (res.ok) 
+    {
 
-      const ticket = {
-        id:            Date.now(),
-        flightNumber:  flightNum,
-        origin:        flight?.origin        || '',
-        destination:   flight?.destination   || '',
-        departureTime: flight?.departureTime || '',
-        price:         flight?.price         || 0,
-        passengerName: name,
-        passport:      passport,
-        seatClass:     seatClass,
-        bookedAt:      new Date().toLocaleDateString('mn-MN')
-      };
+        const type = document.getElementById("seatClass"); 
+
+        const flight = allFlights.find(f => f.flightNumber === flightNum);
+
+        let price = flight?.price || 0;
+
+        if (seatClass === "Business") price += 50;
+        if (seatClass === "First") price += 100;
+
+        const ticket = {
+            id:            Date.now(),
+            flightNumber:  flightNum,
+            origin:        flight?.origin        || '',
+            destination:   flight?.destination   || '',
+            departureTime: flight?.departureTime || '',
+            price:         flight?.price         || 0,
+            passengerName: name,
+            passport:      passport,
+            seatClass:     seatClass,
+            bookedAt:      new Date().toLocaleDateString('mn-MN')
+        };
+
+     
+
+    
 
       myTickets.push(ticket);
       localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
@@ -195,6 +208,7 @@ async function submitBooking() {
       document.getElementById('passengerName').value = '';
       document.getElementById('passportNum').value   = '';
       document.getElementById('bookFlight').value    = '';
+    
 
       loadFlights();
       setTimeout(() => switchTab('tickets'), 1500);

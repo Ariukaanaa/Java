@@ -1,8 +1,9 @@
-const API = 'http://localhost:8080/api/flights';
+const API         = 'http://localhost:8080/api/flights';  // Java
+const PHP_API = 'http://localhost:8000/api/orders';   // Symfony
 
-let allFlights  = [];
-let myTickets   = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
-let pendingTicket = null; // Confirmation хүлээж байгаа захиалга
+let allFlights    = [];
+let myTickets     = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
+let pendingTicket = null;
 
 // ===== TAB SWITCH =====
 function switchTab(name) {
@@ -29,6 +30,38 @@ function showToast(msg, type = 'success') {
   setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// ===== CHECK JAVA STATUS =====
+async function checkJavaStatus() {
+  try {
+    const res = await fetch(API);
+    if (res.ok) {
+      document.getElementById('javaDot').className  = 'dot';
+      document.getElementById('javaText').textContent = 'Java ✓';
+    } else {
+      throw new Error();
+    }
+  } catch {
+    document.getElementById('javaDot').className  = 'dot offline';
+    document.getElementById('javaText').textContent = 'Java ✗';
+  }
+}
+
+// ===== CHECK SYMFONY STATUS =====
+async function checkSymfonyStatus() {
+  try {
+    const res = await fetch(PHP_API);
+    if (res.ok) {
+      document.getElementById('phpDot').className   = 'dot';
+      document.getElementById('phpText').textContent = 'PHP ✓';
+    } else {
+      throw new Error();
+    }
+  } catch {
+    document.getElementById('phpDot').className   = 'dot offline';
+    document.getElementById('phpText').textContent = 'PHP ✗';
+  }
+}
+
 // ===== LOAD FLIGHTS FROM JAVA =====
 async function loadFlights() {
   document.getElementById('flightsContainer').innerHTML = `
@@ -43,15 +76,15 @@ async function loadFlights() {
 
     allFlights = await res.json();
 
-    document.getElementById('statusDot').className    = 'dot';
-    document.getElementById('statusText').textContent = 'Java сервер холбогдсон';
+    document.getElementById('javaDot').className    = 'dot';
+    document.getElementById('javaText').textContent = 'Java ✓';
 
     renderFlights(allFlights);
     populateBookingSelect(allFlights);
 
   } catch {
-    document.getElementById('statusDot').className    = 'dot offline';
-    document.getElementById('statusText').textContent = 'Сервер холбогдохгүй байна';
+    document.getElementById('javaDot').className    = 'dot offline';
+    document.getElementById('javaText').textContent = 'Java ✗';
 
     document.getElementById('flightsContainer').innerHTML = `
       <div class="empty">
@@ -172,7 +205,6 @@ async function submitBooking() {
   if (seatClass === 'Business') price += 50;
   if (seatClass === 'First')    price += 100;
 
-  // Pending ticket үүсгэнэ — төлөх товч дарахад л хадгална
   pendingTicket = {
     id:            Date.now(),
     flightNumber:  flightNum,
@@ -187,58 +219,76 @@ async function submitBooking() {
     bookedAt:      new Date().toLocaleDateString('mn-MN')
   };
 
-  // Confirmation хуудсыг дүүргэнэ
   renderConfirmation(pendingTicket);
-
-  // Confirmation tab руу явна
   switchTab('confirm');
 }
 
 // ===== RENDER CONFIRMATION =====
-// HTML-г index.html дотор статикаар бичсэн —
-// энд зөвхөн утгуудыг шинэчилнэ
 function renderConfirmation(ticket) {
-  document.getElementById('confirm-route').textContent   = ticket.origin + ' → ' + ticket.destination;
-  document.getElementById('confirm-flight').textContent  = ticket.flightNumber;
-  document.getElementById('confirm-time').textContent    = ticket.departureTime + ' → ' + ticket.arrivalTime;
-  document.getElementById('confirm-name').textContent    = ticket.passengerName;
+  document.getElementById('confirm-route').textContent    = ticket.origin + ' → ' + ticket.destination;
+  document.getElementById('confirm-flight').textContent   = ticket.flightNumber;
+  document.getElementById('confirm-time').textContent     = ticket.departureTime + ' → ' + ticket.arrivalTime;
+  document.getElementById('confirm-name').textContent     = ticket.passengerName;
   document.getElementById('confirm-passport').textContent = ticket.passport;
-  document.getElementById('confirm-class').textContent   = ticket.seatClass;
-  document.getElementById('confirm-price').textContent   = '$' + ticket.price;
+  document.getElementById('confirm-class').textContent    = ticket.seatClass;
+  document.getElementById('confirm-price').textContent    = '$' + ticket.price;
 }
 
-// ===== CONFIRM PAYMENT → Java-д POST хийж ticket хадгална =====
+// ===== CONFIRM PAYMENT =====
+// 1. Java  → суудал хасна
+// 2. Symfony → захиалга DB-д хадгална
 async function confirmPayment() {
   if (!pendingTicket) return;
 
   try {
-    const res  = await fetch(`${API}/${pendingTicket.flightNumber}/book`, { method: 'POST' });
-    const data = await res.json();
+    // ---- 1. Java: суудал хасах ----
+    const javaRes  = await fetch(`${API}/${pendingTicket.flightNumber}/book`, { method: 'POST' });
+    const javaData = await javaRes.json();
 
-    if (res.ok) {
-      // Ticket хадгална
-      myTickets.push(pendingTicket);
-      localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
-      updateTicketCount();
-
-      // Form цэвэрлэх
-      document.getElementById('passengerName').value = '';
-      document.getElementById('passportNum').value   = '';
-      document.getElementById('bookFlight').value    = '';
-      pendingTicket = null;
-
-      loadFlights();
-      showToast('✅ Төлбөр амжилттай төлөгдлөө!');
-
-      // Ticket tab руу явна
-      setTimeout(() => switchTab('tickets'), 1000);
-
-    } else {
-      showToast('❌ ' + data.message, 'error');
+    if (!javaRes.ok) {
+      showToast('❌ ' + javaData.message, 'error');
+      return;
     }
 
+    // ---- 2. PHP: захиалга хадгалах ----
+    const symfonyRes = await fetch(PHP_API, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        flightNumber:  pendingTicket.flightNumber,
+        passengerName: pendingTicket.passengerName,
+        passport:      pendingTicket.passport,
+        seatClass:     pendingTicket.seatClass,
+        price:         pendingTicket.price
+      })
+    });
+
+    // Symfony ажиллахгүй байвал — зөвхөн warning, захиалга үргэлжилнэ
+    if (!symfonyRes.ok) {
+      console.warn('Symfony хадгалахад алдаа гарлаа');
+      document.getElementById('phpDot').className    = 'dot offline';
+      document.getElementById('phpText').textContent = 'Symfony ✗';
+    } else {
+      document.getElementById('phpDot').className    = 'dot';
+      document.getElementById('phpText').textContent = 'Symfony ✓';
+    }
+
+    // ---- 3. LocalStorage + UI ----
+    myTickets.push(pendingTicket);
+    localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
+    updateTicketCount();
+
+    document.getElementById('passengerName').value = '';
+    document.getElementById('passportNum').value   = '';
+    document.getElementById('bookFlight').value    = '';
+    pendingTicket = null;
+
+    loadFlights();
+    showToast('✅ Төлбөр амжилттай төлөгдлөө!');
+    setTimeout(() => switchTab('tickets'), 1000);
+
   } catch {
-    showToast('❌ Сервертэй холбогдож чадсангүй', 'error');
+    showToast('❌ Php сервертэй холбогдож чадсангүй', 'error');
   }
 }
 
@@ -296,4 +346,11 @@ function updateTicketCount() {
 
 // ===== INIT =====
 loadFlights();
+checkSymfonyStatus();
 updateTicketCount();
+
+// 30 секунд тутамд status шалгана
+setInterval(() => {
+  checkJavaStatus();
+  checkSymfonyStatus();
+}, 30000);

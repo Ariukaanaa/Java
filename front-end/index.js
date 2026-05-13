@@ -1,5 +1,5 @@
 const API         = 'http://localhost:8080/api/flights';  // Java
-const PHP_API = 'http://localhost:8000/api/orders';   // Symfony
+const PHP_API     = 'http://localhost:8000/api/orders';   // PHP
 
 let allFlights    = [];
 let myTickets     = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
@@ -46,8 +46,8 @@ async function checkJavaStatus() {
   }
 }
 
-// ===== CHECK SYMFONY STATUS =====
-async function checkSymfonyStatus() {
+// ===== CHECK PHP STATUS =====
+async function checkPHPstatus() {
   try {
     const res = await fetch(PHP_API);
     if (res.ok) {
@@ -250,8 +250,8 @@ async function confirmPayment() {
       return;
     }
 
-    // ---- 2. PHP: захиалга хадгалах ----
-    const symfonyRes = await fetch(PHP_API, {
+    // ---- 2. PHP: zahialga hadgalah  ----
+    const phpRes = await fetch(PHP_API, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({
@@ -263,14 +263,14 @@ async function confirmPayment() {
       })
     });
 
-    // Symfony ажиллахгүй байвал — зөвхөн warning, захиалга үргэлжилнэ
-    if (!symfonyRes.ok) {
+    // PHP ажиллахгүй байвал — зөвхөн warning, захиалга үргэлжилнэ
+    if (!phpRes.ok) {
       console.warn('Symfony хадгалахад алдаа гарлаа');
       document.getElementById('phpDot').className    = 'dot offline';
-      document.getElementById('phpText').textContent = 'Symfony ✗';
+      document.getElementById('phpText').textContent = 'PHP ✗';
     } else {
       document.getElementById('phpDot').className    = 'dot';
-      document.getElementById('phpText').textContent = 'Symfony ✓';
+      document.getElementById('phpText').textContent = 'PHP ✓';
     }
 
     // ---- 3. LocalStorage + UI ----
@@ -346,11 +346,11 @@ function updateTicketCount() {
 
 // ===== INIT =====
 loadFlights();
-checkSymfonyStatus();
+checkPHPstatus();
 updateTicketCount();
 
 // 30 секунд тутамд status шалгана
 setInterval(() => {
   checkJavaStatus();
-  checkSymfonyStatus();
+  checkPHPstatus();
 }, 30000);

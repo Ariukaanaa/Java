@@ -1,6 +1,6 @@
 <?php
 
-// ===== CORS =====
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -68,7 +68,7 @@ if ($method === 'GET' && isset($parts[2]) && is_numeric($parts[2])) {
 if ($method === 'POST' && $uri === '/api/orders') {
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Талбар шалгах
+    // check hiih 
     $required = ['flightNumber', 'passengerName', 'passport', 'seatClass', 'price'];
     foreach ($required as $field) {
         if (empty($data[$field])) {

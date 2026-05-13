@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // ===== DB холболт =====
 $db = new PDO(
-    'pgsql:host=postgres;port=5432;dbname=airline',
-    'airline',
-    'airline123'
+    'pgsql:host=' . getenv('DB_HOST') . ';port=5432;dbname=' . getenv('DB_NAME'),
+    getenv('DB_USER'),
+    getenv('DB_PASS')
 );
 
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

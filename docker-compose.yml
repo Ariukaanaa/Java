@@ -1,0 +1,38 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_DB: airline
+      POSTGRES_USER: airline
+      POSTGRES_PASSWORD: airline123
+    ports:
+      - "5432:5432"
+
+  back-java:
+    build: ./back-java
+    container_name: back-java
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  back-php:
+    build: ./back-php
+    container_name: back-php
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./back-php:/app
+    working_dir: /app
+    depends_on:
+      - postgres
+
+  front-end:
+    image: nginx:alpine
+    container_name: front-end
+    ports:
+      - "3000:80"
+    volumes:
+      - ./front-end:/usr/share/nginx/html:ro

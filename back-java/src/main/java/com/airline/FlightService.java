@@ -26,21 +26,27 @@ public class FlightService {
         return flights;
     }
 
-    // Суудал байгаа нислэгүүд
-    public List<Flight> getAvailableFlights() {
-        return flights.stream()
-                .filter(f -> f.getAvailableSeats() > 0)
-                .toList();
+    // suudal baigaa nisleguud
+    public List<Flight> getAvailableFlights() 
+    {
+        List<Flight> result = new ArrayList<>();
+
+        for (Flight f : flights) {
+            if (f.getAvailableSeats() > 0) {
+                result.add(f);
+            }
+        }
+        return result;
     }
 
-    // Нислэгийн дугаараар хайх
+    // 
     public Optional<Flight> getByFlightNumber(String flightNumber) {
         return flights.stream()
                 .filter(f -> f.getFlightNumber().equalsIgnoreCase(flightNumber))
                 .findFirst();
     }
 
-    // Очих газраар хайх
+    // ochih gazraa haih 
     public List<Flight> searchByDestination(String destination) {
         return flights.stream()
                 .filter(f -> f.getDestination().toLowerCase()
@@ -48,7 +54,7 @@ public class FlightService {
                 .toList();
     }
 
-    // Суудал захиалах (суудлын тоог хасна)
+    // suudliin too hash 
     public boolean bookSeat(String flightNumber) {
         Optional<Flight> flight = getByFlightNumber(flightNumber);
         if (flight.isPresent() && flight.get().getAvailableSeats() > 0) {

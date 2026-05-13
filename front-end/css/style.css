@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
 :root {
-  --sky:      #D96846;
+  --sky:      #cf7c23;
   --sky-mid:  #100806;
-  --sky-card: #ac390b;
+  --sky-card: #ef0e0e;
   --accent:   #e8c547;
   --accent2:  #4fc3f7;
   --text:     #101010;
@@ -28,29 +28,11 @@ body {
   line-height: 1.6;
 }
 
-/* Stars */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 10% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 35% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 65% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(2px 2px at 75% 85%, rgba(255,255,255,0.2) 0%, transparent 100%),
-    radial-gradient(1px 1px at 45% 15%, rgba(255,255,255,0.6) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
 
 /* ===== HEADER ===== */
 header {
   position: relative;
-  height: 200px;
+  height: 300px;
   overflow: hidden;
   z-index: 10;
   display: flex;
@@ -74,6 +56,43 @@ header::before {
 header > * {
   position: relative;
   z-index: 1;
+}
+
+/* ===== PLANE ANIMATION LAYER ===== */
+
+.plane-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 300px; /* header height-тэй тааруулсан */
+  overflow: hidden;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.plane {
+  position: absolute;
+  width: 220px;
+  top: 80px;
+  left: -100px;
+  animation: fly 10s linear infinite;
+}
+
+@keyframes fly {
+  0% {
+    left: -120px;
+    top: 200px;
+  }
+
+  50% {
+    top: 20px;
+  }
+
+  100% {
+    left: 110%;
+    top: 120px;
+  }
 }
 
 .logo {
@@ -239,7 +258,7 @@ main {
   transition: all 0.15s;
 }
 
-.btn:active { transform: scale(0.97); }
+.btn:active { transform: scale(0.90); }
 
 .btn-primary {
   background: var(--accent);
@@ -247,17 +266,17 @@ main {
   font-weight: 600;
 }
 
-.btn-primary:hover { background: #f0d060; }
+.btn-primary:hover { background: #e91811; }
 
 .btn-full { width: 100%; padding: 14px; }
 
 .btn-outline {
-  background: transparent;
+  background:  var(--accent);
   border: 1px solid rgba(255,255,255,0.2);
   color: var(--muted);
 }
 
-.btn-outline:hover { border-color: var(--accent2); color: var(--accent2); }
+.btn-outline:hover { border-color: var(--accent2); color: var(--accent2);  background: #e91811; }
 
 .btn-book {
   background: transparent;
@@ -275,7 +294,7 @@ main {
 .btn-book:disabled { opacity: 0.3; cursor: not-allowed; border-color: var(--muted); color: var(--muted); }
 
 .btn-danger {
-  background: transparent;
+  background:  var(--accent);
   border: 1px solid rgba(255,255,255,0.15);
   color: rgba(255,255,255,0.5);
   font-size: 13px;
@@ -559,5 +578,5 @@ select.form-input option { background: #1a1a1a; color: white; }
 }
 
 .toast.show    { transform: translateY(0); opacity: 1; }
-.toast.success { background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.4); color: var(--success); }
-.toast.error   { background: rgba(255,107,107,0.15); border: 1px solid rgba(255,107,107,0.4); color: var(--danger); }
+.toast.success { background: rgba(255, 255, 255, 0.932);  border: 1px solid rgba(74,222,128,0.4);  color: var(--success); }
+.toast.error   { background: rgba(255, 255, 255, 0.932); border: 1px solid rgba(255,107,107,0.4); color: var(--danger) ; }

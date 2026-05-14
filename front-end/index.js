@@ -265,7 +265,7 @@ async function confirmPayment() {
 
     // PHP ажиллахгүй байвал — зөвхөн warning, захиалга үргэлжилнэ
     if (!phpRes.ok) {
-      console.warn('Symfony хадгалахад алдаа гарлаа');
+      console.warn('PHP хадгалахад алдаа гарлаа');
       document.getElementById('phpDot').className    = 'dot offline';
       document.getElementById('phpText').textContent = 'PHP ✗';
     } else {

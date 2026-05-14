@@ -1,8 +1,8 @@
-const API     = 'https://back-java-latest-1.onrender.com/api/flights';  // Java 
-const PHP_API = 'https://back-php-latest.onrender.com/api/orders';      // PHP 
+// const API     = 'https://back-java-latest-1.onrender.com/api/flights';  // Java 
+// const PHP_API = 'https://back-php-latest.onrender.com/api/orders';      // PHP 
 
-// const API     = 'http://localhost:8080/api/flights';  // Local java
-// const PHP_API = 'http://localhost:8000/api/orders';   // Local PHP
+const API     = 'http://localhost:8080/api/flights';  // Local java
+const PHP_API = 'http://localhost:8000/api/orders';   // Local PHP
 
 // ===== Global huvisagchid =====
 let allFlights    = [];                                                         // Java-s tatsan nisleguud 
@@ -204,7 +204,6 @@ function calcDuration(dep, arr) {
 
   // Daraa udriin nisleg bol 24 tsag nemne
   if (ah < dh) ah += 24;
-
   const totalMins = (ah * 60 + am) - (dh * 60 + dm);
 
   return Math.floor(totalMins / 60) + 'ц ' + (totalMins % 60) + 'м';

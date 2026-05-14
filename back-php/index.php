@@ -41,28 +41,16 @@ $parts  = explode('/', trim($uri, '/'));
 
 // ===== ROUTER =====
 
-// GET /api/orders
+// GET /api/orders buh zahialgiig avh 
 if ($method === 'GET' && $uri === '/api/orders') {
     $stmt = $db->query("SELECT * FROM orders ORDER BY created_at DESC");
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
     exit();
 }
 
-// GET /api/orders/{id}
-if ($method === 'GET' && isset($parts[2]) && is_numeric($parts[2])) {
-    $stmt = $db->prepare("SELECT * FROM orders WHERE id = ?");
-    $stmt->execute([$parts[2]]);
-    $order = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (!$order) {
-        http_response_code(404);
-        echo json_encode(['message' => 'Захиалга олдсонгүй']);
-        exit();
-    }
-    echo json_encode($order);
-    exit();
-}
 
-// POST /api/orders
+
+// POST /api/orders zahialga insert hiih 
 if ($method === 'POST' && $uri === '/api/orders') {
     $data = json_decode(file_get_contents('php://input'), true);
 
@@ -94,7 +82,7 @@ if ($method === 'POST' && $uri === '/api/orders') {
     exit();
 }
 
-// DELETE /api/orders/{id}
+// DELETE /api/orders/{id} zahialga delete hiih 
 if ($method === 'DELETE' && isset($parts[2]) && is_numeric($parts[2])) 
 {
     $stmt = $db->prepare("DELETE FROM orders WHERE id = ?");

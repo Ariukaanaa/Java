@@ -95,10 +95,13 @@ if ($method === 'POST' && $uri === '/api/orders') {
 }
 
 // DELETE /api/orders/{id}
-if ($method === 'DELETE' && isset($parts[2]) && is_numeric($parts[2])) {
-    $stmt = $db->prepare("UPDATE orders SET status = 'cancelled' WHERE id = ?");
+if ($method === 'DELETE' && isset($parts[2]) && is_numeric($parts[2])) 
+{
+    $stmt = $db->prepare("DELETE FROM orders WHERE id = ?");
     $stmt->execute([$parts[2]]);
-    echo json_encode(['message' => 'Захиалга цуцлагдлаа']);
+    echo json_encode([
+        'message' => 'Захиалга устгагдлаа'
+    ]);
     exit();
 }
 

@@ -1,5 +1,5 @@
-const API         = 'https://back-java-latest-1.onrender.com';  // Java
-const PHP_API     = 'https://back-php-latest.onrender.com';   // PHP
+const API         = 'https://back-java-latest-1.onrender.com/api/flights';  // Java
+const PHP_API     = 'https://back-php-latest.onrender.com/api/orders';   // PHP
 
 let allFlights    = [];
 let myTickets     = JSON.parse(localStorage.getItem('skymnTickets') || '[]');

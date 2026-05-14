@@ -32,7 +32,7 @@ public class FlightController {
     }
 
     // -------- GET /api/flights/available --------
-    // Суудал байгаа нислэгүүд
+    // Suudal baigaa nisleguud
     @GetMapping("/available")
     public List<Flight> getAvailableFlights() {
         return flightService.getAvailableFlights();
@@ -47,15 +47,15 @@ public class FlightController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // -------- GET /api/flights/search?destination=Сөүл --------
-    // Очих газраар хайх
+    // -------- GET /api/flights/search?destination --------
+    // ochih gazraa haiah 
     @GetMapping("/search")
     public List<Flight> searchByDestination(@RequestParam String destination) {
         return flightService.searchByDestination(destination);
     }
 
     // -------- POST /api/flights/{flightNumber}/book --------
-    // Суудал захиалах
+    // Suudal zahialh 
     @PostMapping("/{flightNumber}/book")
     public ResponseEntity<Map<String, String>> bookSeat(@PathVariable String flightNumber) {
         boolean success = flightService.bookSeat(flightNumber);

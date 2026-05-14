@@ -21,16 +21,16 @@ $db = new PDO(
 
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// ===== table uusgeh =====
+
+// shineer uusgeh 
 $db->exec("CREATE TABLE IF NOT EXISTS orders (
-    id          SERIAL PRIMARY KEY,
+    id             SERIAL PRIMARY KEY,
     flight_number  VARCHAR(20)  NOT NULL,
     passenger_name VARCHAR(100) NOT NULL,
     passport       VARCHAR(50)  NOT NULL,
     seat_class     VARCHAR(20)  NOT NULL,
     price          FLOAT        NOT NULL,
-    status         VARCHAR(20)  DEFAULT 'confirmed',
-    created_at     TIMESTAMP    DEFAULT NOW()
+    status         VARCHAR(20)  DEFAULT 'confirmed'
 )");
 
 // ===== URL parse =====

@@ -38,8 +38,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $parts  = explode('/', trim($uri, '/'));
 
-// /api/orders
-// /api/orders/1
 
 // ===== ROUTER =====
 

@@ -39,7 +39,7 @@ public class FlightController {
     }
 
     // -------- GET /api/flights/{flightNumber} --------
-    // Нислэгийн дугаараар хайх
+    // nislegiig dugaarar haih 
     @GetMapping("/{flightNumber}")
     public ResponseEntity<Flight> getByFlightNumber(@PathVariable String flightNumber) {
         return flightService.getByFlightNumber(flightNumber)

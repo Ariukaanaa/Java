@@ -383,9 +383,6 @@ async function renderTickets() {
           <div class="ticket-meta">
             ${t.flight_number} · ${t.seat_class} · ${t.passenger_name}
           </div>
-          <div class="ticket-meta" style="margin-top:2px;">
-            Захиалсан: ${t.created_at}
-          </div>
         </div>
 
         <div style="text-align:right;">

@@ -1,5 +1,8 @@
 const API         = 'https://back-java-latest-1.onrender.com/api/flights';  // Java
-const PHP_API     = 'https://back-php-latest.onrender.com/api/orders';   // PHP
+const PHP_API     = 'https://back-php-latest.onrender.com/api/orders';      // PHP
+
+// const API     = 'http://localhost:8080/api/flights';  // Java
+// const PHP_API = 'http://localhost:8000/api/orders';   // PHP
 
 let allFlights    = [];
 let myTickets     = JSON.parse(localStorage.getItem('skymnTickets') || '[]');
@@ -187,7 +190,7 @@ function quickBook(flightNum) {
   document.getElementById('bookFlight').value = flightNum;
 }
 
-// ===== SUBMIT BOOKING → Confirmation руу явна =====
+// ===== SUBMIT BOOKING → Confirmation ruu yvna  =====
 async function submitBooking() {
   const flightNum = document.getElementById('bookFlight').value;
   const name      = document.getElementById('passengerName').value.trim();
@@ -235,13 +238,11 @@ function renderConfirmation(ticket) {
 }
 
 // ===== CONFIRM PAYMENT =====
-// 1. Java  → суудал хасна
-// 2. Symfony → захиалга DB-д хадгална
 async function confirmPayment() {
   if (!pendingTicket) return;
 
   try {
-    // ---- 1. Java: суудал хасах ----
+    // ---- suuudal hash  ----
     const javaRes  = await fetch(`${API}/${pendingTicket.flightNumber}/book`, { method: 'POST' });
     const javaData = await javaRes.json();
 
@@ -250,7 +251,7 @@ async function confirmPayment() {
       return;
     }
 
-    // ---- 2. PHP: zahialga hadgalah  ----
+    // ---- PHP: zahialga hadgalah  ----
     const phpRes = await fetch(PHP_API, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -263,7 +264,7 @@ async function confirmPayment() {
       })
     });
 
-    // PHP ажиллахгүй байвал — зөвхөн warning, захиалга үргэлжилнэ
+    // PHP ajillahgui baival warning uguud tsaah urgeljlene
     if (!phpRes.ok) {
       console.warn('PHP хадгалахад алдаа гарлаа');
       document.getElementById('phpDot').className    = 'dot offline';
@@ -273,7 +274,7 @@ async function confirmPayment() {
       document.getElementById('phpText').textContent = 'PHP ✓';
     }
 
-    // ---- 3. LocalStorage + UI ----
+    // ---- browser deer hadgalna ----
     myTickets.push(pendingTicket);
     localStorage.setItem('skymnTickets', JSON.stringify(myTickets));
     updateTicketCount();
@@ -293,36 +294,49 @@ async function confirmPayment() {
 }
 
 // ===== RENDER TICKETS =====
-function renderTickets() {
-  if (!myTickets.length) {
-    document.getElementById('ticketsContainer').innerHTML =
-      '<div class="empty">🎫 Одоогоор захиалга байхгүй байна</div>';
-    return;
-  }
-
-  const cards = myTickets.map(t => `
-    <div class="ticket-card">
-      <div>
-        <div class="ticket-route">${t.origin} → ${t.destination}</div>
-        <div class="ticket-meta">
-          ${t.flightNumber} · ${t.departureTime} · ${t.seatClass} · ${t.passengerName}
-        </div>
-        <div class="ticket-meta" style="margin-top:2px;">
-          Захиалсан: ${t.bookedAt}
-        </div>
-      </div>
-      <div style="text-align:right;">
-        <div class="ticket-price">$${t.price}</div>
-        <div class="ticket-badge">Баталгаажсан</div>
-      </div>
-    </div>
-  `).join('');
-
+async function renderTickets() {
   document.getElementById('ticketsContainer').innerHTML = `
-    <div class="tickets-grid">${cards}</div>
-    <button class="btn btn-danger" onclick="clearTickets()">
-      Бүгдийг устгах
-    </button>`;
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <div>Захиалгууд татаж байна...</div>
+    </div>`;
+ 
+  try {
+   
+    const res     = await fetch(PHP_API);
+    const tickets = await res.json();
+ 
+    if (!tickets.length) {
+      document.getElementById('ticketsContainer').innerHTML =
+        '<div class="empty">🎫 Одоогоор захиалга байхгүй байна</div>';
+      return;
+    }
+ 
+    const cards = tickets.map(t => `
+      <div class="ticket-card">
+        <div>
+          <div class="ticket-route">${t.flight_number}</div>
+          <div class="ticket-meta">
+            ${t.flight_number} · ${t.seat_class} · ${t.passenger_name}
+          </div>
+          <div class="ticket-meta" style="margin-top:2px;">
+            Захиалсан: ${t.created_at}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="ticket-price">$${t.price}</div>
+          <div class="ticket-badge">${t.status}</div>
+        </div>
+      </div>
+    `).join('');
+ 
+    document.getElementById('ticketsContainer').innerHTML =
+      `<div class="tickets-grid">${cards}</div>`;
+ 
+  } catch {
+    document.getElementById('ticketsContainer').innerHTML =
+      '<div class="empty">⚠️ Захиалга татахад алдаа гарлаа</div>';
+  }
 }
 
 // ===== CLEAR TICKETS =====
@@ -349,7 +363,7 @@ loadFlights();
 checkPHPstatus();
 updateTicketCount();
 
-// 30 секунд тутамд status шалгана
+// 30 second tutam status shalgana 
 setInterval(() => {
   checkJavaStatus();
   checkPHPstatus();

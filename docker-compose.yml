@@ -4,9 +4,9 @@ services:
     image: postgres:16-alpine
     container_name: postgres
     environment:
-      POSTGRES_DB: airline
-      POSTGRES_USER: airline
-      POSTGRES_PASSWORD: airline123
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
     ports:
       - "5432:5432"
 
@@ -26,6 +26,11 @@ services:
     volumes:
       - ./back-php:/app
     working_dir: /app
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
     depends_on:
       - postgres
 

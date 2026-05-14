@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// ===== DB холболт =====
+//db holbolt 
 $db = new PDO(
     'pgsql:host=' . getenv('DB_HOST') . ';port=5432;dbname=' . getenv('DB_NAME'),
     getenv('DB_USER'),
@@ -21,7 +21,7 @@ $db = new PDO(
 
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// ===== Хүснэгт үүсгэх (байхгүй бол) =====
+// ===== table uusgeh =====
 $db->exec("CREATE TABLE IF NOT EXISTS orders (
     id          SERIAL PRIMARY KEY,
     flight_number  VARCHAR(20)  NOT NULL,
@@ -38,8 +38,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $parts  = explode('/', trim($uri, '/'));
 
-// /api/orders
-// /api/orders/1
 
 // ===== ROUTER =====
 

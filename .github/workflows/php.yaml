@@ -1,4 +1,3 @@
-# .github/workflows/php.yml
 name: PHP Docker Build & Push
 
 on:

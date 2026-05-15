@@ -1,4 +1,3 @@
-# .github/workflows/java.yml
 name: Java Docker Build & Push
 
 on:
